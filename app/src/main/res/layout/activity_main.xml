@@ -27,6 +27,8 @@
         android:id="@+id/myedittext"
         android:layout_width="match_parent"
         android:layout_height="63dp"
+        android:inputType="textPersonName"
+        android:ems="10"
         android:text="@string/editmessage" />
 
     <ImageButton
