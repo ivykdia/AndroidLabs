@@ -1,34 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context="ui.MainActivity">
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108" />
+        android:id="@+id/textview"
+        />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:text="@string/button_message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/button_message" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/myedittext"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:text="@string/editmessage" />
+
+    <ImageButton
+        android:id="@+id/myimagebutton"
+        android:layout_width="104dp"
+        android:layout_height="96dp"
+        android:src="@drawable/logo_algonquin"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+    <Switch
+        android:id="@+id/mySwitch"
+        android:layout_width="match_parent"
+        android:layout_height="73dp"
+        android:text="Do you drink coffee?" />
+
+    <CheckBox
+        android:id="@+id/myCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Do you drink coffee?" />
+
+    <RadioButton
+        android:id="@+id/myRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Do you drink coffee?" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/logo_algonquin"
+
+        />
+
+
+</LinearLayout>
 
 
 

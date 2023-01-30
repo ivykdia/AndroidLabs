@@ -23,8 +23,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         model = new ViewModelProvider(this).get(MainViewModel.class);
         variableBinding = ActivityMainBinding.inflate(getLayoutInflater());
+
         variableBinding.mySwitch.setChecked(true);
         setContentView(variableBinding.getRoot());
+
+        variableBinding.myimagebutton.setOnClickListener(imageBtn ->{
+
+        });
 
 
 
@@ -37,6 +42,40 @@ public class MainActivity extends AppCompatActivity {
 
             });
         });
+
+        variableBinding.myCheckBox.setOnCheckedChangeListener( (btn, isChecked) -> {
+            model.isSelected.postValue(variableBinding.myCheckBox.isChecked());
+            model.isSelected.observe(this, selected -> {
+                variableBinding.myCheckBox.setChecked(selected);
+            variableBinding.myRadioButton.setChecked(selected);
+            variableBinding.mySwitch.setChecked(selected);
+
+        });
+        });
+
+        variableBinding.mySwitch.setOnCheckedChangeListener( (btn, isChecked) -> {
+            model.isSelected.postValue(variableBinding.mySwitch.isChecked());
+            model.isSelected.observe(this, selected -> {
+                variableBinding.myCheckBox.setChecked(selected);
+                variableBinding.myRadioButton.setChecked(selected);
+                variableBinding.mySwitch.setChecked(selected);
+
+            });
+        });
+
+
+        variableBinding.myRadioButton.setOnCheckedChangeListener( (btn, isChecked) -> {
+            model.isSelected.postValue(variableBinding.myRadioButton.isChecked());
+            model.isSelected.observe(this, selected -> {
+                variableBinding.myCheckBox.setChecked(selected);
+                variableBinding.myRadioButton.setChecked(selected);
+                variableBinding.mySwitch.setChecked(selected);
+
+            });
+        });
+
+
+
     }
 
 
