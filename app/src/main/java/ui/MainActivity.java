@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import algonquin.cst2335.li000793.databinding.ActivityMainBinding;
 import data.MainViewModel;
@@ -27,10 +28,11 @@ public class MainActivity extends AppCompatActivity {
         variableBinding.mySwitch.setChecked(true);
         setContentView(variableBinding.getRoot());
 
-        variableBinding.myimagebutton.setOnClickListener(imageBtn ->{
 
+        variableBinding.myimagebutton.setOnClickListener(click -> {
+
+            Toast.makeText(this,"The width = " + click.getWidth() + " and height = " + click.getHeight(),Toast.LENGTH_SHORT).show();
         });
-
 
 
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             });
         });
+
 
 
 
