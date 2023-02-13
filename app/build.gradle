@@ -5,6 +5,10 @@ plugins {
 android {
     namespace 'algonquin.cst2335.li000793'
     compileSdk 32
+    buildFeatures{
+        viewBinding true
+    }
+
 
     defaultConfig {
         applicationId "algonquin.cst2335.li000793"
