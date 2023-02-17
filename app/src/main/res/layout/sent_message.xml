@@ -23,7 +23,6 @@
         android:layout_height="33dp"
         android:layout_marginTop="4dp"
         android:text="Time goes here"
-        android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.899"
         app:layout_constraintStart_toStartOf="parent"

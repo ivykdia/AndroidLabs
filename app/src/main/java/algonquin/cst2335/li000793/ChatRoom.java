@@ -13,9 +13,20 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import algonquin.cst2335.li000793.databinding.ActivityChatRoomBinding;
+import algonquin.cst2335.li000793.databinding.SentMessageBinding;
+
 public class ChatRoom extends AppCompatActivity {
     ActivityChatRoomBinding binding;
-
+    class MyRowHolder extends RecyclerView.ViewHolder {
+        TextView messageText;
+        TextView timeText;
+        public MyRowHolder(@NonNull View itemView) {
+            super(itemView);
+            messageText = itemView.findViewById(R.id.messageText);
+            timeText = itemView.findViewById(R.id.timeText);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,14 +61,6 @@ public class ChatRoom extends AppCompatActivity {
         });
 
 
-        class MyRowHolder extends RecyclerView.ViewHolder {
-            TextView messageText;
-            TextView timeText;
-            public MyRowHolder(@NonNull View itemView) {
-                super(itemView);
-                messageText = itemView.findViewById(R.id.messageText);
-                timeText = itemView.findViewById(R.id.timeText);
-            }
-        }
+
     }
 }
