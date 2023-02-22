@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":9,"i2":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -263,23 +263,31 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#checkPasswordComplexity(java.lang.String)">checkPasswordComplexity</a></span>&#8203;(java.lang.String&nbsp;pw)</code></th>
+<td class="colLast">
+<div class="block">Checks whether a given password meets the complexity requirements.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSpecialCharacter(char)">isSpecialCharacter</a></span>&#8203;(char&nbsp;c)</code></th>
+<td class="colLast">
+<div class="block">Determines whether a given character is a special character
+ from the set <code># $ % ^ &amp; * ! @</code>.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onCreate(android.os.Bundle)">onCreate</a></span>&#8203;(android.os.Bundle&nbsp;savedInstanceState)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verifyPassword(java.lang.String)">verifyPassword</a></span>&#8203;(java.lang.String&nbsp;pw)</code></th>
-<td class="colLast">
-<div class="block">This function scans the string to see if it is complex enough</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -400,19 +408,39 @@ extends androidx.appcompat.app.AppCompatActivity</pre>
 </dl>
 </li>
 </ul>
-<a id="verifyPassword(java.lang.String)">
+<a id="checkPasswordComplexity(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>checkPasswordComplexity</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;checkPasswordComplexity&#8203;(java.lang.String&nbsp;pw)</pre>
+<div class="block">Checks whether a given password meets the complexity requirements.
+ The password must contain at least one uppercase letter, one lowercase letter,
+ one number, and one special character from the set <code># $ % ^ &amp; * ! @</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pw</code> - the password to check.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the password meets the complexity requirements,
+         <code>false</code> otherwise.</dd>
+</dl>
+</li>
+</ul>
+<a id="isSpecialCharacter(char)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>verifyPassword</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;verifyPassword&#8203;(java.lang.String&nbsp;pw)</pre>
-<div class="block">This function scans the string to see if it is complex enough</div>
+<h4>isSpecialCharacter</h4>
+<pre class="methodSignature">public static&nbsp;boolean&nbsp;isSpecialCharacter&#8203;(char&nbsp;c)</pre>
+<div class="block">Determines whether a given character is a special character
+ from the set <code># $ % ^ &amp; * ! @</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pw</code> - The string to verify</dd>
+<dd><code>c</code> - the character to check.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>True if pw has uppercase, otherwise false</dd>
+<dd><code>true</code> if the character is a special character, <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>

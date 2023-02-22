@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
              if (checkPasswordComplexity(password)) {
                  tv.setText("Your password meets the requirements");
              }else
-                    tv.setText("You shall not pass!");
+                    tv.setText("you shall not pass!");
 
 
         });
