@@ -1,7 +1,22 @@
-package algonquin.cst2335.li000793;public class ChatMessage {
+package algonquin.cst2335.li000793;
 
-    private final String message;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
+public class ChatMessage {
+    @PrimaryKey(autoGenerate=true)
+
+    @ColumnInfo(name="ID")
+    public Long id;
+
+    @ColumnInfo(name="message")
+    public String message;
+    @ColumnInfo(name="TimeSent")
     private final String timeSent;
+    @ColumnInfo(name="isSentButton")
     private final boolean isSentButton;
 
     public ChatMessage(String message, String timeSent, boolean isSentButton) {

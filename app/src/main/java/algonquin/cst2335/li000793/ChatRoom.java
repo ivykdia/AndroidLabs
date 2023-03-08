@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import algonquin.cst2335.li000793.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.li000793.databinding.ReceiveMessageBinding;
@@ -27,10 +30,15 @@ public class ChatRoom extends AppCompatActivity {
     private ChatRoomViewModel chatModel;
     private ArrayList<ChatMessage> messages;
     private RecyclerView.Adapter<MyRowHolder> myAdapter;
-
+    ChatMessageDAO mDAO ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //get database:
+        MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "MyMessagesDatabase").build();
+         mDAO = db.cmDAO();
+
+
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -50,6 +58,18 @@ public class ChatRoom extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
             messages.add(new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,true));
+            //ChatMessage newMessage = new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,true);//
+
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(() -> {
+                ChatMessage newMessage = messages.get(messages.size() - 1);
+                long id = mDAO.insertMessage(newMessage);
+                newMessage.id = id;
+            });
+
+
+
+
             myAdapter.notifyItemInserted(messages.size() - 1);
             binding.textInput.setText("");
         });
