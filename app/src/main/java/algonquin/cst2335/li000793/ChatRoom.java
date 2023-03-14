@@ -1,6 +1,7 @@
 package algonquin.cst2335.li000793;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,7 +61,7 @@ public class ChatRoom extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
             messages.add(new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,true));
-            //ChatMessage newMessage = new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,true);//
+
 
             Executor thread = Executors.newSingleThreadExecutor();
             thread.execute(() -> {
@@ -126,6 +129,36 @@ public class ChatRoom extends AppCompatActivity {
 
         public MyRowHolder(@NonNull View itemView, boolean isSend) {
             super(itemView);
+
+
+            itemView.setOnClickListener(click ->{
+
+                int position = getAbsoluteAdapterPosition();
+                MyRowHolder newRow = myAdapter.onCreateViewHolder(null, myAdapter.getItemViewType(position));
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+                builder.setMessage("Do you want to delete the message:" + messageText.getText());
+                builder.setTitle("Question:")
+                        .setNegativeButton("No",(dialog, cl)->{})
+                        .setPositiveButton("Yes", (dialog, cl)->{
+                           ChatMessage removedMessage = messages.get(position);
+                            messages.remove(position);
+                            myAdapter.notifyItemRemoved(position);
+
+                            Snackbar.make(messageText, "you deleted message #" + position, Snackbar.LENGTH_LONG)
+                                    .setAction("Undo", clk -> {
+                                        messages.add(position, removedMessage);
+                                        myAdapter.notifyItemRemoved(position);
+
+
+                                    })
+
+
+                                    .show();
+                        })
+                        .create().show();
+
+            });
+
             messageText = itemView.findViewById(R.id.message);
             timeText = itemView.findViewById(R.id.time);
         }
