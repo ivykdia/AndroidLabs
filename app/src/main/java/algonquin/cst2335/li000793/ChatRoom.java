@@ -141,19 +141,32 @@ public class ChatRoom extends AppCompatActivity {
                         .setNegativeButton("No",(dialog, cl)->{})
                         .setPositiveButton("Yes", (dialog, cl)->{
                            ChatMessage removedMessage = messages.get(position);
+                           Executor thread_1 = Executors.newSingleThreadExecutor();
+                            mDAO.deleteMessage(removedMessage);
                             messages.remove(position);
-                            myAdapter.notifyItemRemoved(position);
+                            //myAdapter.notifyItemRemoved(position);
+                         runOnUiThread(()-> {
+                             myAdapter.notifyItemRemoved(position);
 
-                            Snackbar.make(messageText, "you deleted message #" + position, Snackbar.LENGTH_LONG)
-                                    .setAction("Undo", clk -> {
-                                        messages.add(position, removedMessage);
-                                        myAdapter.notifyItemRemoved(position);
+                             Snackbar.make(messageText, "you deleted message #" + position, Snackbar.LENGTH_LONG)
+                                     .setAction("Undo", clk -> {
+                                         Executor tread_2 = Executors.newSingleThreadExecutor();
+                                         tread_2.execute(() -> {
+                                             mDAO.insertMessage(removedMessage);
+                                             messages.add(position, removedMessage);
+                                             runOnUiThread(() -> {
+                                                 myAdapter.notifyItemInserted(position);
+                                             });
+                                         });
+                                     }).show();
+
+                         });
+                                });
+                     builder.setNegativeButton("Cancel",(dialog, which)->{
+
+                     });
 
 
-                                    })
-
-
-                                    .show();
                         })
                         .create().show();
 
