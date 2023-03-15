@@ -39,7 +39,7 @@ public class ChatRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //get database:
         MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "MyMessagesDatabase").build();
-         mDAO = db.cmDAO();
+        mDAO = db.cmDAO();
 
 
 
@@ -60,28 +60,40 @@ public class ChatRoom extends AppCompatActivity {
         binding.sendbutton.setOnClickListener(click -> {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
-            messages.add(new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,true));
 
+            ChatMessage msg = new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,true);
 
             Executor thread = Executors.newSingleThreadExecutor();
             thread.execute(() -> {
-                ChatMessage newMessage = messages.get(messages.size() - 1);
-                long id = mDAO.insertMessage(newMessage);
-                newMessage.id = id;
+
+                long id = mDAO.insertMessage(msg);
+                msg.id = id;
+                messages.add(msg);
+                runOnUiThread(()->{
+                    myAdapter.notifyItemInserted(messages.size() - 1);
+                });
             });
 
-
-
-
-            myAdapter.notifyItemInserted(messages.size() - 1);
             binding.textInput.setText("");
         });
 
         binding.receivebutton.setOnClickListener(click -> {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
-            messages.add(new ChatMessage(binding.textInput.getText().toString(),currentDateandTime, false));
-            myAdapter.notifyItemInserted(messages.size() - 1);
+
+            ChatMessage msg = new ChatMessage(binding.textInput.getText().toString(), currentDateandTime,false);
+
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(() -> {
+
+                long id = mDAO.insertMessage(msg);
+                msg.id = id;
+                messages.add(msg);
+                runOnUiThread(()->{
+                    myAdapter.notifyItemInserted(messages.size() - 1);
+                });
+            });
+
             binding.textInput.setText("");
         });
 
@@ -133,47 +145,50 @@ public class ChatRoom extends AppCompatActivity {
 
             itemView.setOnClickListener(click ->{
 
-                int position = getAbsoluteAdapterPosition();
-                MyRowHolder newRow = myAdapter.onCreateViewHolder(null, myAdapter.getItemViewType(position));
-                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
-                builder.setMessage("Do you want to delete the message:" + messageText.getText());
-                builder.setTitle("Question:")
-                        .setNegativeButton("No",(dialog, cl)->{})
-                        .setPositiveButton("Yes", (dialog, cl)->{
-                           ChatMessage removedMessage = messages.get(position);
-                           Executor thread_1 = Executors.newSingleThreadExecutor();
-                            mDAO.deleteMessage(removedMessage);
-                            messages.remove(position);
-                            //myAdapter.notifyItemRemoved(position);
-                         runOnUiThread(()-> {
-                             myAdapter.notifyItemRemoved(position);
+                        int position = getAbsoluteAdapterPosition();
+                        MyRowHolder newRow = myAdapter.onCreateViewHolder(null, myAdapter.getItemViewType(position));
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+                        builder.setMessage("Do you want to delete the message:" + messageText.getText());
+                        builder.setTitle("Question:")
+                                .setNegativeButton("No",(dialog, cl)->{})
+                                .setPositiveButton("Yes", (dialog, cl)->{
+                                    ChatMessage removedMessage = messages.get(position);
+                                    Executor thread_1 = Executors.newSingleThreadExecutor();
+                                    thread_1.execute(()->{
+                                        mDAO.deleteMessage(removedMessage);
+                                        messages.remove(position);
+                                        //myAdapter.notifyItemRemoved(position);
+                                        runOnUiThread(()-> {
+                                            myAdapter.notifyItemRemoved(position);
 
-                             Snackbar.make(messageText, "you deleted message #" + position, Snackbar.LENGTH_LONG)
-                                     .setAction("Undo", clk -> {
-                                         Executor tread_2 = Executors.newSingleThreadExecutor();
-                                         tread_2.execute(() -> {
-                                             mDAO.insertMessage(removedMessage);
-                                             messages.add(position, removedMessage);
-                                             runOnUiThread(() -> {
-                                                 myAdapter.notifyItemInserted(position);
-                                             });
-                                         });
-                                     }).show();
+                                            Snackbar.make(messageText, "you deleted message #" + position, Snackbar.LENGTH_LONG)
+                                                    .setAction("Undo", clk -> {
+                                                        Executor tread_2 = Executors.newSingleThreadExecutor();
+                                                        tread_2.execute(() -> {
+                                                            mDAO.insertMessage(removedMessage);
+                                                            messages.add(position, removedMessage);
+                                                            runOnUiThread(() -> {
+                                                                myAdapter.notifyItemInserted(position);
+                                                            });
+                                                        });
+                                                    }).show();
 
-                         });
+                                        });
+                                    });
+
                                 });
-                     builder.setNegativeButton("Cancel",(dialog, which)->{
+                        builder.setNegativeButton("Cancel",(dialog, which)->{
 
-                     });
+                        });
+                        builder.create().show();
 
 
-                        })
-                        .create().show();
-
-            });
-
+                    });
             messageText = itemView.findViewById(R.id.message);
             timeText = itemView.findViewById(R.id.time);
         }
+
+
     }
+
 }
