@@ -43,6 +43,7 @@ public class ChatRoom extends AppCompatActivity {
 
 
 
+
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -53,8 +54,15 @@ public class ChatRoom extends AppCompatActivity {
         messages = chatModel.messages.getValue();
 
         // If the ArrayList has never been set before, initialize it with a new instance
-        if (messages == null) {
-            chatModel.messages.postValue(messages = new ArrayList<>());
+        if(messages == null)  {
+            chatModel.messages.postValue( messages = new ArrayList<ChatMessage>());
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(() ->
+            {
+                messages.addAll(mDAO.getALLMessages()); //Once you get the data from database
+                //run in main thread
+                runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
+            });
         }
 
         binding.sendbutton.setOnClickListener(click -> {
