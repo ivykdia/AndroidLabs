@@ -155,7 +155,7 @@ public class ChatRoom extends AppCompatActivity {
 
                         int position = getAbsoluteAdapterPosition();
                         MyRowHolder newRow = myAdapter.onCreateViewHolder(null, myAdapter.getItemViewType(position));
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+                       /* AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
                         builder.setMessage("Do you want to delete the message:" + messageText.getText());
                         builder.setTitle("Question:")
                                 .setNegativeButton("No",(dialog, cl)->{})
@@ -188,7 +188,7 @@ public class ChatRoom extends AppCompatActivity {
                         builder.setNegativeButton("Cancel",(dialog, which)->{
 
                         });
-                        builder.create().show();
+                        builder.create().show(); */
 
 
                     });
