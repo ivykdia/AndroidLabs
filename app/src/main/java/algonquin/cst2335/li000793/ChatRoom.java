@@ -64,6 +64,12 @@ public class ChatRoom extends AppCompatActivity {
                 runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
             });
         }
+            chatModel.selectedMessage.observe(this,(newMessageValue) ->{
+                MessageDetailsFragment chatFragment = new MessageDetailsFragment(newMessageValue);
+                getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentLocation, chatFragment)
+                        .commit();
+            });
 
         binding.sendbutton.setOnClickListener(click -> {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");

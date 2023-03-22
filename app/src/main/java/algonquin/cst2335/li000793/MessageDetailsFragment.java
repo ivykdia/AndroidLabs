@@ -22,7 +22,11 @@ public class MessageDetailsFragment extends Fragment {
         DetailsLayoutBinding binding = DetailsLayoutBinding.inflate(inflater);
 
         binding.messageText.setText(selected.message);
-        binding.timeText.setText(selected.timeSent);
+        binding.timeText.setText(selected.getTimeSent());
+        if (selected.isSentButton()){
+            binding.messagesent.setText("sent");}
+        else   binding.messagesent.setText("received");
+
         binding.databaseText.setText("Id =" + selected.id);
 
 
