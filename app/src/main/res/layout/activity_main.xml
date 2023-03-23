@@ -1,44 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="198dp"
-        android:layout_height="43dp"
-        android:text="Type your password"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.269" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type in the name of city:"
+         />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="254dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="112dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:text=""
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.587"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/cityTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type city name here"
+        />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="185dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="32dp"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/forecastButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Forecast"
+        />
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Temp goes here"/>
+    <TextView
+        android:id="@+id/maxtemp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Max goes here"/>
+    <TextView
+        android:id="@+id/mintemp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Min goes here"/>
+    <TextView
+        android:id="@+id/humitidy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Humidity goes here"/>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description goes here"/>
+
+
+
+
+</LinearLayout>
