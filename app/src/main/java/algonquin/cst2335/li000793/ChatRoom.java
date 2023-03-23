@@ -1,6 +1,7 @@
 package algonquin.cst2335.li000793;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,6 +11,7 @@ import androidx.room.Room;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,6 +37,50 @@ public class ChatRoom extends AppCompatActivity {
     private ArrayList<ChatMessage> messages;
     private RecyclerView.Adapter<MyRowHolder> myAdapter;
     ChatMessageDAO mDAO ;
+
+   /* @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.item_1: //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
+                //asking if the user wants to delete this message.
+                break;
+        }
+        return true;
+    }*/
+   @Override
+   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+       switch(item.getItemId()) {
+           case R.id.item_1:
+               // Show an alert dialog to confirm if the user wants to delete the selected message
+               new AlertDialog.Builder(this)
+                       .setTitle("Delete Message")
+                       .setMessage("Are you sure you want to delete this message?")
+                       .setPositiveButton("Yes", (dialog, which) -> {
+                           // Delete the selected message from the database and the RecyclerView
+                           int position = chatModel.selectedMessage.getValue();
+                           ChatMessage messageToDelete = messages.get(position);
+
+                           Executor thread = Executors.newSingleThreadExecutor();
+                           thread.execute(() -> {
+                               mDAO.deleteMessage(messageToDelete);
+
+                               runOnUiThread(() -> {
+                                   messages.remove(position);
+                                   myAdapter.notifyItemRemoved(position);
+                               });
+                           });
+
+                           // Display a Snackbar to confirm that the message has been deleted
+                           Snackbar.make(binding.getRoot(), "Message deleted", Snackbar.LENGTH_SHORT).show();
+                       })
+                       .setNegativeButton("No", null)
+                       .show();
+               break;
+       }
+       return true;
+   }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
