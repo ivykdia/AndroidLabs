@@ -52,34 +52,44 @@ public class ChatRoom extends AppCompatActivity {
    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
        switch(item.getItemId()) {
            case R.id.item_1:
-               // Show an alert dialog to confirm if the user wants to delete the selected message
-               new AlertDialog.Builder(this)
-                       .setTitle("Delete Message")
-                       .setMessage("Are you sure you want to delete this message?")
-                       .setPositiveButton("Yes", (dialog, which) -> {
-                           // Delete the selected message from the database and the RecyclerView
-                           int position = chatModel.selectedMessage.getValue();
-                           ChatMessage messageToDelete = messages.get(position);
+               // Get the index of the selected chat message
 
-                           Executor thread = Executors.newSingleThreadExecutor();
-                           thread.execute(() -> {
-                               mDAO.deleteMessage(messageToDelete);
 
-                               runOnUiThread(() -> {
-                                   messages.remove(position);
-                                   myAdapter.notifyItemRemoved(position);
-                               });
-                           });
+               int selectedIndex = chatModel.selectedMessage.getValue();
 
-                           // Display a Snackbar to confirm that the message has been deleted
-                           Snackbar.make(binding.getRoot(), "Message deleted", Snackbar.LENGTH_SHORT).show();
-                       })
-                       .setNegativeButton("No", null)
-                       .show();
-               break;
+               // If no chat message is selected, show a Snackbar message and return
+               if(selectedIndex == null) {
+                   Snackbar.make(binding.getRoot(), "No chat message selected", Snackbar.LENGTH_SHORT).show();
+                   return true;
+               }
+
+               // Show an alert dialog asking the user if they want to delete the selected chat message
+               AlertDialog.Builder builder = new AlertDialog.Builder(this);
+               builder.setMessage("Do you want to delete this message?");
+               builder.setPositiveButton("Delete", (dialog, which) -> {
+                   // Delete the selected chat message from the database and the ArrayList
+                   ChatMessage deletedMessage = messages.remove(selectedIndex);
+                   Executor thread = Executors.newSingleThreadExecutor();
+                   thread.execute(() -> {
+                       mDAO.deleteMessage(deletedMessage);
+                   });
+
+                   // Notify the adapter that the selected chat message has been removed
+                   myAdapter.notifyItemRemoved(selectedIndex);
+
+                   // Reset the selected chat message index to null
+                   chatModel.selectedIndex.postValue(null);
+
+                   // Show a Snackbar message confirming the deletion
+                   Snackbar.make(binding.getRoot(), "Message deleted", Snackbar.LENGTH_SHORT).show();
+               });
+               builder.setNegativeButton("Cancel", null);
+               builder.create().show();
+               return true;
        }
-       return true;
+       return super.onOptionsItemSelected(item);
    }
+
 
 
     @Override
