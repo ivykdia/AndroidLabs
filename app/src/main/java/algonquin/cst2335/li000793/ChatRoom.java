@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,28 +38,16 @@ public class ChatRoom extends AppCompatActivity {
     private ArrayList<ChatMessage> messages;
     private RecyclerView.Adapter<MyRowHolder> myAdapter;
     ChatMessageDAO mDAO ;
-
-   /* @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId())
-        {
-            case R.id.item_1: //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
-                //asking if the user wants to delete this message.
-                break;
-        }
-        return true;
-    }*/
    @Override
    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
        switch(item.getItemId()) {
            case R.id.item_1:
                // Get the index of the selected chat message
-
-
-               int selectedIndex = chatModel.selectedMessage.getValue();
+               int selectedIndex = chatModel.selectedIndex.getValue();
+               Log.d("ChatRoom", "Selected index: " + selectedIndex);
 
                // If no chat message is selected, show a Snackbar message and return
-               if(selectedIndex == null) {
+               if(selectedIndex == -1) {
                    Snackbar.make(binding.getRoot(), "No chat message selected", Snackbar.LENGTH_SHORT).show();
                    return true;
                }
@@ -89,6 +78,7 @@ public class ChatRoom extends AppCompatActivity {
        }
        return super.onOptionsItemSelected(item);
    }
+
 
 
 
