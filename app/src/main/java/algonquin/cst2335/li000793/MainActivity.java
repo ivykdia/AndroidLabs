@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
             String stringURL = null;
             try {
                 stringURL = new StringBuilder()
-                        .append("https://api.openweathermap.org/data/2.5/weather?\n" +
-                                "q=TORONTO&appid=5ca052234fba8185afa6b02956b76b01&units=metric\n")
+                        .append("https://api.openweathermap.org/data/2.5/weather?q=")
                         .append(URLEncoder.encode(cityName, "UTF-8"))
                         .append("&appid=7e943c97096a9784391a981c4d878b22&units=metric").toString();
             } catch(UnsupportedEncodingException e) {
