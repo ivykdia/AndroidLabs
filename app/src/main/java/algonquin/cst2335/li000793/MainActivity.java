@@ -2,6 +2,7 @@ package algonquin.cst2335.li000793;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        queue = Volley.RequestQueue(this);
+        queue = Volley.newRequestQueue(this);
         ActivityMainBinding binding = ActivityMainBinding.inflate( getLayoutInflater() );
         setContentView(binding.getRoot());
         binding.forecastButton.setOnClickListener(click -> {
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             } catch(UnsupportedEncodingException e) {
                 e.printStackTrace(); }
 //this goes in the button click handler (JsonObjectRequest):
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,stringURL,jsonRequest null,
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,stringURL,null,
             (response) -> {
                 try {
                     JSONObject coord = response.getJSONObject("coord");
