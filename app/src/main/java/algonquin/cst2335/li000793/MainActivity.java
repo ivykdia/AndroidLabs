@@ -2,11 +2,26 @@ package algonquin.cst2335.li000793;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import algonquin.cst2335.li000793.databinding.ActivityMainBinding;
 
 /** This is a page that simulates a login page
  * @author Jiaqiao Li
@@ -16,112 +31,100 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
 
-    /** This holds the edit text where the user puts their password **/
+    protected String cityName;
+    protected RequestQueue queue = null;
+    Bitmap image;
 
-    private EditText thePasswordText;
-    /** This hold the text at the centre of the screen */
-    private TextView tv = null;
-    /** This holds edit text under the text of the screen */
-    private  Button btn = null;
-    /** This holds the button on the bottom of the screen*/
-    private EditText et = null;
 
-    @Override  //This starts the application
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*loads buttons / text on screen */
         setContentView(R.layout.activity_main);
+        queue = Volley.RequestQueue(this);
+        ActivityMainBinding binding = ActivityMainBinding.inflate( getLayoutInflater() );
+        setContentView(binding.getRoot());
+        binding.forecastButton.setOnClickListener(click -> {
+            cityName = binding.cityTextField.getText().toString();
+            String stringURL = null;
+            try {
+                stringURL = new StringBuilder()
+                        .append("https://api.openweathermap.org/data/2.5/weather?\n" +
+                                "q=TORONTO&appid=5ca052234fba8185afa6b02956b76b01&units=metric\n")
+                        .append(URLEncoder.encode(cityName, "UTF-8"))
+                        .append("&appid=7e943c97096a9784391a981c4d878b22&units=metric").toString();
+            } catch(UnsupportedEncodingException e) {
+                e.printStackTrace(); }
+//this goes in the button click handler (JsonObjectRequest):
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,stringURL,jsonRequest null,
+            (response) -> {
+                try {
+                    JSONObject coord = response.getJSONObject("coord");
+                    JSONArray weatherArray = response.getJSONArray("weather");
+                    JSONObject position0 = weatherArray.getJSONObject(0);
 
-        //R means res
-        //layout is the folder
-        //activity_main is the file
+                    String description = position0.getString("description");
+                    String iconName = position0.getString("icon");
+                    JSONObject mainObject = response.getJSONObject("main");
+                    double current = mainObject.getDouble("temp");
+                    double min = mainObject.getDouble("temp_min");
+                    double max = mainObject.getDouble("temp_max");
+                    int humidity = mainObject.getInt("humidity");
 
-        TextView tv = findViewById(R.id.textView);
-        Button btn = findViewById(R.id.button);
-        EditText et = findViewById(R.id.editText);
-
-        btn.setOnClickListener( clk -> {
-            String password = et.getText().toString();
-
-            //looking for Uppercase, lowercase, numbber, and special character
-
-            checkPasswordComplexity(password);
-             if (checkPasswordComplexity(password)) {
-                 tv.setText("Your password meets the requirements");
-             }else
-                    tv.setText("you shall not pass!");
+                    String pathname = getFilesDir() + "/" + iconName + ".png";
+                    File file = new File(pathname);
+                    if(file.exists()) {
+                        image = BitmapFactory.decodeFile(pathname);
+                    }
 
 
-        });
-    }
+                 else {
+                        ImageRequest imgReq = new ImageRequest("https://openweathermap.org/img/w/" +
+                                iconName + ".png", new Response.Listener<Bitmap>(){
+                            @Override
+                            public void onResponse(Bitmap bitmap) {
+                                try{
+                                    image= bitmap;
+                                    image.compress(Bitmap.CompressFormat.PNG, 100,
+                                            MainActivity.this.openFileOutput(iconName + ".png", Activity.MODE_PRIVATE));
+                                    binding.icon.setImageBitmap(image);
+                                } catch(Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } // end of onResponse
 
 
-    /**
-     * Checks whether a given password meets the complexity requirements.
-     * The password must contain at least one uppercase letter, one lowercase letter,
-     * one number, and one special character from the set {@code # $ % ^ & * ! @}.
-     *
-     * @param pw the password to check.
-     * @return {@code true} if the password meets the complexity requirements,
-     *         {@code false} otherwise.
-     */
-    public boolean checkPasswordComplexity(String pw) {
-        boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
-        foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
+                            }, 1024, 1024, ImageView.ScaleType.CENTER, null, (error) -> {
+                                Toast.makeText(MainActivity.this, ""+error, Toast.LENGTH_SHORT).show();
+                            });
+                                 queue.add(imgReq);
+                        } // end of else
 
-        for (int i = 0; i < pw.length(); i++) {
-            char c = pw.charAt(i);
-            if (Character.isUpperCase(c)) {
-                foundUpperCase = true;
-            } else if (Character.isLowerCase(c)) {
-                foundLowerCase = true;
-            } else if (Character.isDigit(c)) {
-                foundNumber = true;
-            } else if (isSpecialCharacter(c)) {
-                foundSpecial = true;
-            }
+
+            runOnUiThread(() -> {
+                binding.temp.setText("The current temperature is " + current);
+                binding.temp.setVisibility(View.VISIBLE);
+                binding.mintemp.setText("The min temperature is " + min);
+                binding.mintemp.setVisibility(View.VISIBLE);
+                binding.maxtemp.setText("The max temperature is " + max);
+                binding.maxtemp.setVisibility(View.VISIBLE);
+                binding.humidity.setText("The humidity is " + humidity + "%");
+                binding.humidity.setVisibility(View.VISIBLE);
+                binding.icon.setImageBitmap(image);
+                binding.icon.setVisibility(View.VISIBLE);
+                binding.description.setText(description);
+                binding.description.setVisibility(View.VISIBLE);
+            });
+
+        } // end of try
+catch(JSONException e) {
+            e.printStackTrace();
         }
-
-        if (!foundUpperCase) {
-            Toast.makeText(this, "Your password must contain at least one uppercase letter.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (!foundLowerCase) {
-            Toast.makeText(this, "Your password must contain at least one lowercase letter.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (!foundNumber) {
-            Toast.makeText(this, "Your password must contain at least one number.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (!foundSpecial) {
-            Toast.makeText(this, "Your password must contain at least one special character.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Determines whether a given character is a special character
-     * from the set {@code # $ % ^ & * ! @}.
-     *
-     * @param c the character to check.
-     * @return {@code true} if the character is a special character, {@code false} otherwise.
-     */
-    public static boolean isSpecialCharacter(char c) {
-        switch (c) {
-            case '#':
-            case '$':
-            case '%':
-            case '^':
-            case '&':
-            case '*':
-            case '!':
-            case '@':
-                return true;
-            default:
-                return false;
-        }
-    }
+    },
+            (error) -> { });
+queue.add(request);
+}); // binding.forecastButton.setOnClickListener
 
 
 
+ }
 }
